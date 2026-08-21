@@ -1,0 +1,54 @@
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.csproj.AssemblyReference.cache
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.GeneratedMSBuildEditorConfig.editorconfig
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.AssemblyInfoInputs.cache
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.AssemblyInfo.cs
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.csproj.CoreCompileInputs.cache
+E:/Unity Project/PokerServer/bin/Debug/net6.0/PokerServer.exe
+E:/Unity Project/PokerServer/bin/Debug/net6.0/PokerServer.deps.json
+E:/Unity Project/PokerServer/bin/Debug/net6.0/PokerServer.runtimeconfig.json
+E:/Unity Project/PokerServer/bin/Debug/net6.0/PokerServer.dll
+E:/Unity Project/PokerServer/bin/Debug/net6.0/PokerServer.pdb
+E:/Unity Project/PokerServer/bin/Debug/net6.0/Newtonsoft.Json.dll
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.csproj.CopyComplete
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.dll
+E:/Unity Project/PokerServer/obj/Debug/net6.0/refint/PokerServer.dll
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.pdb
+E:/Unity Project/PokerServer/obj/Debug/net6.0/PokerServer.genruntimeconfig.cache
+E:/Unity Project/PokerServer/obj/Debug/net6.0/ref/PokerServer.dll
+E:/Unity Project/PokerServer/bin/Debug/net6.0/MySqlConnector.dll
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/PokerServer
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/PokerServer.deps.json
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/PokerServer.runtimeconfig.json
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/PokerServer.dll
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/PokerServer.pdb
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/MySqlConnector.dll
+/Volumes/Work/PokerServer_siki/bin/Debug/net6.0/Newtonsoft.Json.dll
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.csproj.AssemblyReference.cache
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.AssemblyInfoInputs.cache
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.AssemblyInfo.cs
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.csproj.CoreCompileInputs.cache
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerSer.823918B5.Up2Date
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.dll
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/refint/PokerServer.dll
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.pdb
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/PokerServer.genruntimeconfig.cache
+/Volumes/Work/PokerServer_siki/obj/Debug/net6.0/ref/PokerServer.dll
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/PokerServer
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/PokerServer.deps.json
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/PokerServer.runtimeconfig.json
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/PokerServer.dll
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/PokerServer.pdb
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/MySqlConnector.dll
+/Volumes/Work/MyText/PokerServer/bin/Debug/net6.0/Newtonsoft.Json.dll
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.csproj.AssemblyReference.cache
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.AssemblyInfoInputs.cache
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.AssemblyInfo.cs
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.csproj.CoreCompileInputs.cache
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerSer.823918B5.Up2Date
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.dll
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/refint/PokerServer.dll
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.pdb
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/PokerServer.genruntimeconfig.cache
+/Volumes/Work/MyText/PokerServer/obj/Debug/net6.0/ref/PokerServer.dll
