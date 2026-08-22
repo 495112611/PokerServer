@@ -5,41 +5,41 @@ using System.Collections.Generic;
 public class ByteArray 
 {
     /// <summary>
-    /// Ä¬ÈÏ´óĞ¡
+    /// é»˜è®¤å¤§å°
     /// </summary>
     const int DEFAULT_SIZE = 1024;
     /// <summary>
-    /// ³õÊ¼´óĞ¡
+    /// åˆå§‹å¤§å°
     /// </summary>
     private int initSize;
     /// <summary>
-    /// ×Ö½ÚÊı×é
+    /// å­—èŠ‚æ•°ç»„
     /// </summary>
     public byte[] bytes;
     /// <summary>
-    /// ¶ÁµÄÎ»ÖÃ
+    /// è¯»çš„ä½ç½®
     /// </summary>
     public int readIndex;
     /// <summary>
-    /// Ğ´µÄÎ»ÖÃ
+    /// å†™çš„ä½ç½®
     /// </summary>
     public int writeIndex;
     /// <summary>
-    /// ÈİÁ¿
+    /// å®¹é‡
     /// </summary>
     private int capacity;
     /// <summary>
-    /// ¶ÁĞ´Ö®¼äµÄ³¤¶È
+    /// è¯»å†™ä¹‹é—´çš„é•¿åº¦
     /// </summary>
     public int Length { get { return writeIndex - readIndex; } }
     /// <summary>
-    /// Êı×éÓàÁ¿
+    /// æ•°ç»„ä½™é‡
     /// </summary>
     public int Remain { get { return capacity-writeIndex; } }
     /// <summary>
-    /// Ìá¹©³¤¶ÈµÄ¹¹Ôìº¯Êı
+    /// æä¾›é•¿åº¦çš„æ„é€ å‡½æ•°
     /// </summary>
-    /// <param name="size">Êı×é³¤¶È</param>
+    /// <param name="size">æ•°ç»„é•¿åº¦</param>
     public ByteArray(int size = DEFAULT_SIZE)
     {
         bytes=new byte[size];
@@ -49,9 +49,9 @@ public class ByteArray
         writeIndex = 0;
     }
     /// <summary>
-    /// Ìá¹©×Ö½ÚÊı×éµÄ¹¹Ôìº¯Êı
+    /// æä¾›å­—èŠ‚æ•°ç»„çš„æ„é€ å‡½æ•°
     /// </summary>
-    /// <param name="defaultBytes">×Ö½ÚÊı×é</param>
+    /// <param name="defaultBytes">å­—èŠ‚æ•°ç»„</param>
     public ByteArray(byte[] defaultBytes)
     {
         bytes = defaultBytes;
@@ -61,7 +61,7 @@ public class ByteArray
         writeIndex=defaultBytes.Length;
     }
     /// <summary>
-    /// ÒÆ¶¯Êı¾İ
+    /// ç§»åŠ¨æ•°æ®
     /// </summary>
     public void MoveBytes()
     {
@@ -73,9 +73,9 @@ public class ByteArray
         readIndex = 0;
     }
     /// <summary>
-    /// ÖØÉè³ß´ç
+    /// é‡è®¾å°ºå¯¸
     /// </summary>
-    /// <param name="size">ĞÂµÄ³¤¶È</param>
+    /// <param name="size">æ–°çš„é•¿åº¦</param>
     public void ReSize(int size)
     {
         if (size < Length)

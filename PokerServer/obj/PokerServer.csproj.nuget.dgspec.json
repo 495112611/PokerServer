@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Volumes/Work/MyText/PokerServer/PokerServer.csproj": {}
+    "/Volumes/Work/MyText/PokerServer/PokerServer/PokerServer.csproj": {}
   },
   "projects": {
-    "/Volumes/Work/MyText/PokerServer/PokerServer.csproj": {
+    "/Volumes/Work/MyText/PokerServer/PokerServer/PokerServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Volumes/Work/MyText/PokerServer/PokerServer.csproj",
+        "projectUniqueName": "/Volumes/Work/MyText/PokerServer/PokerServer/PokerServer.csproj",
         "projectName": "PokerServer",
-        "projectPath": "/Volumes/Work/MyText/PokerServer/PokerServer.csproj",
+        "projectPath": "/Volumes/Work/MyText/PokerServer/PokerServer/PokerServer.csproj",
         "packagesPath": "/Users/apple/.nuget/packages/",
-        "outputPath": "/Volumes/Work/MyText/PokerServer/obj/",
+        "outputPath": "/Volumes/Work/MyText/PokerServer/PokerServer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/apple/.nuget/NuGet/NuGet.Config"
