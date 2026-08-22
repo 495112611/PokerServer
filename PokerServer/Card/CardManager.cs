@@ -19,24 +19,20 @@ public class CardManager
         one,//单张
         two,//对子
         three,//三张
-        threeWithOne,//三带一
-        threeWithTwo,//三带一对
-        airplane,//飞机 333 444
-        airplaneWithOne,//飞机带单张  333 444 5 6
-        airplaneWithTwo,//飞机带对 333 444 55 66
+        threeWithOne,//三代一
+        threeWithTwo,//三带二
+        airplane,//飞机
+        airplaneWithOne,//飞机带一
+        airplaneWithTwo,//飞机带二
         chain,//顺子
         pairChain,//连对
-        bomb,//炸弹 4444
-        fourWithTwo,//四带二 4444 5 6
+        bomb,//炸弹
+        fourWithTwo,//四带二
         jokerBomb,//王炸
-        wrong//错误类型
+        wrong //错误类型
     }
-    /// <summary>
-    /// 获取牌型
-    /// </summary>
-    /// <param name="cards"></param>
-    /// <returns></returns>
-    public static CardType GetCardType(Card[] cards)
+
+    public CardType GetCardType(Card[] cards)
     {
         int[] rank = new int[20];
         int len = cards.Length;
@@ -44,90 +40,130 @@ public class CardManager
         {
             rank[i] = (int)cards[i].rank;
         }
-        Array.Sort(rank, 0, len);
         CardType cardType = CardType.wrong;
+        Array.Sort(rank, 0, len);
         if (len == 1)
         {
             cardType = CardType.one;
         }
         if (len == 2)
         {
-            if (rank[0] == rank[1])
-                cardType = CardType.two;
             if (rank[0] + rank[1] == 27)
+            {
                 cardType = CardType.jokerBomb;
+            }
+            if (rank[0] == rank[1])
+            {
+                cardType = CardType.two;
+            }
         }
         if (len == 3)
         {
-            if (rank[0] == rank[1] && rank[1] == rank[2])
+            if (rank[0] == rank[1] && rank[0] == rank[2])
+            {
                 cardType = CardType.three;
+            }
         }
         if (len == 4)
         {
             if (rank[0] == rank[1] && rank[0] == rank[2] && rank[0] == rank[3])
+            {
                 cardType = CardType.bomb;
-            else if (rank[0] == rank[1] && rank[0] == rank[2])
+            }
+            else if (rank[0] == rank[1] && rank[0] == rank[2] || rank[1] == rank[2] && rank[1] == rank[3])
+            {
                 cardType = CardType.threeWithOne;
-            else if (rank[1] == rank[2] && rank[1] == rank[3])
-                cardType = CardType.threeWithOne;
+            }
         }
-        //不支持带对王的
         if (len == 5)
         {
-            if (rank[0] == rank[1] && rank[0] == rank[2] && rank[3] == rank[4])
+            if (rank[0] == rank[1] && rank[0] == rank[2] && rank[3] == rank[4] || rank[4] == rank[3] && rank[4] == rank[2] && rank[1] == rank[0])
+            {
                 cardType = CardType.threeWithTwo;
-            else if (rank[0] == rank[1] && rank[2] == rank[3] && rank[2] == rank[4])
-                cardType = CardType.threeWithTwo;
+            }
         }
+        //判断4带2
+        //思路：从1或者2或者3开始向后面开始算 满足四个相等
+        if (len == 6)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (rank[i] == rank[i + 1] && rank[i] == rank[i + 2] && rank[i] == rank[i + 3])
+                {
+                    cardType = CardType.fourWithTwo;
+                }
+
+            }
+        }
+        //判断顺子
         if (len >= 5 && len <= 12)
         {
             bool result = true;
             for (int i = 0; i < len - 1; i++)
             {
                 if (rank[i] >= 12 || rank[i + 1] >= 12)
+                {
                     result = false;
+                }
                 if (rank[i] - rank[i + 1] != -1)
+                {
                     result = false;
+                }
             }
-            if (result)
-                cardType = CardType.chain;
+            if (result) { cardType = CardType.chain; }
         }
+        //判断连对
         if (len >= 6 && len % 2 == 0)
         {
             bool result = true;
             for (int i = 0; i < len; i += 2)
             {
-                if (rank[i] != rank[i + 1])
+                if (rank[i] != rank[i + 1])//相邻两个不想等
+                {
                     result = false;
-                if (rank[i] == 12)
+                }
+                if (rank[i] == 12) //除去2之后的
+                {
                     result = false;
+                }
             }
             for (int i = 0; i < len - 2; i += 2)
             {
-                if (rank[i] - rank[i + 2] != -1)
+                if (rank[i] - rank[i + 2] != -1)//第一张和第三张相减不等于-1说明不是连对
+                {
                     result = false;
+                }
             }
             if (result)
+            {
                 cardType = CardType.pairChain;
+            }
         }
         if (len >= 6 && len % 3 == 0)
         {
             bool result = true;
             for (int i = 0; i < len; i += 3)
             {
-                if (rank[i] != rank[i + 1] || rank[i] != rank[i + 2])
+                if (rank[i] != rank[i + 1] || rank[i] != rank[i + 2])//判断前三张是不是不一样
+                {
                     result = false;
-                if (rank[i] == 12)
+                }
+                if (rank[i] == 12) //除去2之后的
+                {
                     result = false;
+                }
             }
             for (int i = 0; i < len - 3; i += 3)
             {
-                if (rank[i] - rank[i + 3] != -1)
+                if (rank[i] - rank[i + 3] != -1)//第一张和第4张相减不等于-1说明不是连对
+                {
                     result = false;
+                }
             }
-            if (result)
-                cardType = CardType.airplane;
+            if (result) { cardType = CardType.pairChain; }
         }
+        //判断飞机带一
+        //思路：把4个看成一组，拿到一共有几组，用一个数组变量存起来有几组，然后判断存起来的数组相邻的差是不是-1
         if (len >= 8 && len % 4 == 0)
         {
             bool result = true;
@@ -136,29 +172,31 @@ public class CardManager
             int index = 0;
             for (int i = 0; i < len - 2; i++)
             {
-                if (rank[i] == rank[i + 1] && rank[i] == rank[i + 2])
-                {
-                    arr[index++] = rank[i];
-                    i += 2;
-                }
+                arr[index++] = rank[i];//每次拿到一组之后index需要++
+                i += 2;
             }
             if (planeLen == index)
             {
                 for (int i = 0; i < planeLen - 1; i++)
                 {
-                    if (arr[i] == 12 || arr[i + 1] == 12)
-                        result = false;
                     if (arr[i] - arr[i + 1] != -1)
+                    {
                         result = false;
+                    }
+                    if (rank[i] == 12 || rank[i + 1] == 12) //除去2之后的
+                    {
+                        result = false;
+                    }
                 }
             }
             else
             {
                 result = false;
             }
-            if (result)
-                cardType = CardType.airplaneWithOne;
+            if (result) { cardType = CardType.airplaneWithOne; }
         }
+        //判断飞机带二
+        //思路：把4个看成一组，拿到一共有几组，用一个数组变量存起来有几组，然后判断存起来的数组相邻的差是不是-1
         if (len >= 10 && len % 5 == 0)
         {
             bool result = true;
@@ -167,20 +205,21 @@ public class CardManager
             int index = 0;
             for (int i = 0; i < len - 2; i++)
             {
-                if (rank[i] == rank[i + 1] && rank[i] == rank[i + 2])
-                {
-                    arr[index++] = rank[i];
-                    i += 2;
-                }
+                arr[index++] = rank[i];//每次拿到一组之后index需要++
+                i += 2;
             }
             if (planeLen == index)
             {
                 for (int i = 0; i < planeLen - 1; i++)
                 {
-                    if (arr[i] == 12 || arr[i + 1] == 12)
-                        result = false;
                     if (arr[i] - arr[i + 1] != -1)
+                    {
                         result = false;
+                    }
+                    if (rank[i] == 12 || rank[i + 1] == 12) //除去2之后的
+                    {
+                        result = false;
+                    }
                 }
             }
             else
@@ -189,114 +228,23 @@ public class CardManager
             }
             for (int i = 0; i < len - 1; i++)
             {
-                if (!arr.Contains(rank[i]))
+                if (!arr.Contains(rank[i]))//拿到有几组飞机的数组之后，遍历所有牌，如果有牌和飞机数组的牌不一样,看这张牌和后面一张的牌是不是一样
                 {
                     if (rank[i] != rank[i + 1])
+                    {
                         result = false;
+                    }
                     else
-                        i++;
+                    {
+                        i++;//如果一样的话 i在for里面+1了 对比下个对子的时候 需要让i再次+1 比如6677 i如果只+1的话 会第二个6和1去比较，所以需要再次+1
+                    }
                 }
             }
-            if (result)
-                cardType = CardType.airplaneWithTwo;
-        }
-        if (len == 6)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (rank[i] == rank[i + 1] && rank[i] == rank[i + 2] && rank[i] == rank[i + 3])
-                    cardType = CardType.fourWithTwo;
-            }
+            if (result) { cardType = CardType.airplaneWithTwo; }
         }
         return cardType;
     }
-    public static bool Compare(Card[] preCards, Card[] cards)
-    {
-        Array.Sort(preCards, (Card c1, Card c2) => (int)c1.rank - (int)c2.rank);
-        Array.Sort(cards, (Card c1, Card c2) => (int)c1.rank - (int)c2.rank);
-        if (GetCardType(cards) == CardType.jokerBomb)
-            return true;
-        if (GetCardType(cards) == CardType.bomb && GetCardType(preCards) != CardType.bomb)
-            return true;
 
-        if (GetCardType(preCards) == GetCardType(cards))
-        {
-            switch (GetCardType(cards))
-            {
-                case CardType.one:
-                    if (preCards[0].rank < cards[0].rank)
-                        return true;
-                    return false;
-                case CardType.two:
-                    if (preCards[0].rank < cards[0].rank)
-                        return true;
-                    return false;
-                case CardType.three:
-                    if (preCards[0].rank < cards[0].rank)
-                        return true;
-                    return false;
-                case CardType.threeWithOne:
-                    if (preCards[1].rank < cards[1].rank)
-                        return true;
-                    return false;
-                case CardType.threeWithTwo:
-                    if (preCards[2].rank < cards[2].rank)
-                        return true;
-                    return false;
-                case CardType.airplane:
-                    if (preCards.Length == cards.Length)
-                        if (preCards[0].rank < cards[0].rank)
-                            return true;
-                    return false;
-                case CardType.airplaneWithOne:
-                case CardType.airplaneWithTwo:
-                    if (preCards.Length == cards.Length)
-                    {
-                        int preIndex = 0;
-                        for (int i = 0; i < cards.Length - 2; i++)
-                        {
-                            if (preCards[i].rank == preCards[i + 1].rank && preCards[i].rank == preCards[i + 2].rank)
-                                preIndex = i;
-                        }
-                        int index = 0;
-                        for (int i = 0; i < cards.Length - 2; i++)
-                        {
-                            if (cards[i].rank == cards[i + 1].rank && cards[i].rank == cards[i + 2].rank)
-                                index = i;
-                        }
-                        if (preCards[preIndex].rank < cards[index].rank)
-                            return true;
-                    }
-                    return false;
-                case CardType.chain:
-                    if (preCards.Length == cards.Length)
-                    {
-                        if (preCards[0].rank < cards[0].rank)
-                            return true;
-                    }
-                    return false;
-                case CardType.pairChain:
-                    if (preCards.Length == cards.Length)
-                    {
-                        if (preCards[0].rank < cards[0].rank)
-                            return true;
-                    }
-                    return false;
-                case CardType.bomb:
-                    if (preCards[0].rank < cards[0].rank)
-                        return true;
-                    return false;
-                case CardType.fourWithTwo:
-                    if (preCards[2].rank < cards[2].rank)
-                        return true;
-                    return false;
-                case CardType.jokerBomb:
-                case CardType.wrong:
-                    break;
-            }
-        }
-        return false;
-    }
     /// <summary>
     /// 洗牌
     /// </summary>
