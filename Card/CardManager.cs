@@ -31,6 +31,11 @@ public class CardManager
         jokerBomb,//王炸
         wrong //错误类型
     }
+    /// <summary>
+    /// 判断牌型
+    /// </summary>
+    /// <param name="cards"></param>
+    /// <returns></returns>
     public static CardType GetCardType(Card[] cards)
     {
         int[] rank = new int[20];
@@ -216,6 +221,99 @@ public class CardManager
         return cardType;
     }
 
+    public static bool Compare(Card[] preCards, Card[] cards)
+    {
+        Array.Sort(preCards, (Card c1, Card c2) => ((int)c1.rank - (int)c2.rank));//先把之前的牌做排序
+        Array.Sort(cards, (Card c1, Card c2) => ((int)c1.rank - (int)c2.rank));//后出的牌排序
+        if (GetCardType(cards) == CardType.jokerBomb) { return true; }
+        if (GetCardType(cards) == CardType.bomb) { return true; }
+        if (GetCardType(cards) == GetCardType(preCards))
+        {
+            switch (GetCardType(cards))
+            {
+                case CardType.one:
+                    if (preCards[0].rank < cards[0].rank)
+                        return true;
+                    return false;
+                case CardType.two:
+                    if (preCards[0].rank < cards[0].rank)
+                        return true;
+                    return false;
+                case CardType.three:
+                    if (preCards[0].rank < cards[0].rank)
+                        return true;
+                    return false;
+                case CardType.threeWithOne:
+                    if (preCards[1].rank < cards[1].rank)
+                        return true;
+                    return false;
+                case CardType.threeWithTwo:
+                    if (preCards[2].rank < cards[2].rank)
+                        return true;
+                    return false;
+                case CardType.airplane:
+                    if (preCards.Length == cards.Length)
+                    {
+                        if (preCards[0].rank < cards[0].rank)
+                            return true;
+                    }
+                    return false;
+                case CardType.airplaneWithOne:
+                case CardType.airplaneWithTwo:
+                    if (preCards.Length == cards.Length)
+                    {
+                        int preIndex = 0;//记录最开始的三个连一起的下标
+                        int index = 0;
+                        for (int i = 0; i < preCards.Length - 2; i++)
+                        {
+                            if (preCards[i].rank == preCards[i + 1].rank && preCards[i].rank == preCards[i + 2].rank)
+                            {
+                                preIndex = i;
+                            }
+                        }
+                        for (int i = 0; i < cards.Length - 2; i++)
+                        {
+                            if (cards[i].rank == cards[i + 1].rank && cards[i].rank == cards[i + 2].rank)
+                            {
+                                index = i;
+                            }
+                        }
+                        if (preCards[preIndex].rank < cards[index].rank)
+                            return true;
+
+                    }
+                    return false;
+                case CardType.chain:
+                    if (preCards.Length == cards.Length)
+                    {
+                        if (preCards[0].rank < cards[0].rank)
+                            return true;
+                    }
+                    return false;
+                case CardType.pairChain:
+                    if (preCards.Length == cards.Length)
+                    {
+                        if (preCards[0].rank < cards[0].rank)
+                            return true;
+                    }
+                    return false;
+                case CardType.bomb:
+                    if (preCards[0].rank < cards[0].rank)
+                        return true;
+                    return false;
+                case CardType.fourWithTwo:
+                if (preCards[2].rank < cards[2].rank)
+                        return true;
+                    return false;
+                case CardType.jokerBomb:
+                case CardType.wrong:
+                    break;
+
+            }
+        }
+
+        return false;
+    }
     /// <summary>
     /// 洗牌
     /// </summary>
