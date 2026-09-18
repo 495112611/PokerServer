@@ -359,9 +359,11 @@ public class MsgHandler
         if (room == null)
             return;
 
-        Console.WriteLine(room.Index);
-        room.Index += msg.round;
-        Console.WriteLine(room.Index);
+        // 首次成功出牌前，轮次始终属于地主，不能按抢地主的步数轮换。
+        if (room.firstPlay)
+            room.Index = room.playerList.IndexOf(room.landLord);
+        else
+            room.Index += msg.round;
 
         room.currentPlayer = room.playerList[room.Index];
 
@@ -413,6 +415,9 @@ public class MsgHandler
         if (room == null)
             return;
 
+        if (room.landLord != "")
+            return;
+
         if (msg.call)
         {
             room.callID = player.id;
@@ -420,11 +425,7 @@ public class MsgHandler
             if (room.CheckCall())
             {
                 msg.result = 3;
-                room.landLord = player.id;
-                foreach (Card card in room.playerCard[""])
-                {
-                    room.playerCard[room.landLord].Add(card);
-                }
+                room.SetLandLord(player.id);
             }
             else
             {
@@ -502,6 +503,9 @@ public class MsgHandler
             return;
 
 
+        if (room.landLord != "")
+            return;
+
         if (msg.rob)
         {
             room.landLordRank[player.id] += room.robRank++;
@@ -512,22 +516,19 @@ public class MsgHandler
             if (room.CheckCall())
             {
                 msg.landLord = room.callID;
-                room.landLord = msg.landLord;
-                foreach (Card card in room.playerCard[""])
-                {
-                    room.playerCard[room.landLord].Add(card);
-                }
             }
         }
         if (player.id == room.callID)
         {
             //检测谁是地主
             msg.landLord = room.CheckLandLord();
-            room.landLord = msg.landLord;
-            foreach (Card card in room.playerCard[""])
-            {
-                room.playerCard[room.landLord].Add(card);
-            }
+        }
+        if (msg.landLord != "")
+        {
+            room.SetLandLord(msg.landLord);
+            msg.needRob = false;
+            room.Send(msg);
+            return;
         }
         if (room.landLordRank[room.playerList[room.Index + 1 >= 3 ? 0 : room.Index + 1]] == 0)
         {
@@ -551,6 +552,13 @@ public class MsgHandler
         if (room == null)
             return;
 
+        if (room.firstPlay && (player.id != room.landLord || !msg.play))
+        {
+            msg.result = false;
+            player.Send(msg);
+            return;
+        }
+
         Card[] cards = CardManager.GetCards(msg.cards);
         if (msg.play)
         {
@@ -568,6 +576,7 @@ public class MsgHandler
             //出牌成功
             if (msg.result)
             {
+                room.firstPlay = false;
                 //删除卡牌
                 room.DeleteCards(cards, msg.id);
                 //判断输赢

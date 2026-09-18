@@ -82,6 +82,10 @@ public class Room
     /// 地主id
     /// </summary>
     public string landLord = "";
+    /// <summary>
+    /// 地主已确定，等待地主首次成功出牌。
+    /// </summary>
+    public bool firstPlay = false;
 
     public int Index
     {
@@ -275,6 +279,12 @@ public class Room
         currentPlayer = playerList[Index];
 
         robRank = 3;
+        callID = "";
+        landLord = "";
+        firstPlay = false;
+        preCard.Clear();
+        prePlay = false;
+        prePrePlay = false;
 
         playerCard.Clear();
         landLordRank.Clear();
@@ -365,6 +375,15 @@ public class Room
 
         return result.s;
     }
+    public void SetLandLord(string id)
+    {
+        landLord = id;
+        Index = playerList.IndexOf(id);
+        currentPlayer = id;
+        firstPlay = true;
+        playerCard[id].AddRange(playerCard[""]);
+    }
+
     public void DeleteCards(Card[] cards, string id)
     {
         for (int i = 0; i < cards.Length; i++)
