@@ -9,7 +9,7 @@ public class MsgBase
 {
     public string protoName = "";
     /// <summary>
-    /// ±àÂë
+    /// æ¶ˆæ¯ç¼–ç 
     /// </summary>
     /// <param name="msgBase"></param>
     /// <returns></returns>
@@ -19,12 +19,12 @@ public class MsgBase
         return Encoding.UTF8.GetBytes(s);
     }
     /// <summary>
-    /// ½âÂë
+    /// æ¶ˆæ¯è§£ç 
     /// </summary>
-    /// <param name="protoName">Ğ­ÒéÃû</param>
-    /// <param name="bytes">×Ö½ÚÊı×é</param>
-    /// <param name="offset">ÆğÊ¼Î»ÖÃ</param>
-    /// <param name="count">Òª×ªÂëµÄÊıÁ¿</param>
+    /// <param name="protoName">åè®®å</param>
+    /// <param name="bytes">å­—èŠ‚æ•°ç»„</param>
+    /// <param name="offset">èµ·å§‹ä½ç½®</param>
+    /// <param name="count">è¦è½¬æ¢çš„é•¿åº¦</param>
     /// <returns></returns>
     public static MsgBase Decode(string protoName, byte[] bytes, int offset, int count)
     {
@@ -32,7 +32,7 @@ public class MsgBase
         return JsonConvert.DeserializeObject(s,Type.GetType(protoName)) as MsgBase;
     }
     /// <summary>
-    /// ±àÂëĞ­ÒéÃû
+    /// ç¼–ç åè®®å
     /// </summary>
     /// <param name="msgBase"></param>
     /// <returns></returns>
@@ -47,7 +47,7 @@ public class MsgBase
         return bytes;
     }
     /// <summary>
-    /// ½âÂë
+    /// è§£ç åè®®å
     /// </summary>
     /// <param name="bytes"></param>
     /// <param name="offset"></param>
