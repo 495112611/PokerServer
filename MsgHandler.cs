@@ -264,6 +264,9 @@ public class MsgHandler
             return;
         }
 
+        if (player.id != room.hostId || room.status == Room.Status.Start)
+            return;
+
         if (room.playerList.Count < 3)
         {
             msg.result = 1;
@@ -330,19 +333,15 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgGetStartPlayer(ClientState c, MsgBase msgBase)
     {
-        MsgGetStartPlayer msg = msgBase as MsgGetStartPlayer;
         Player player = c.player;
         if (player == null)
             return;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        msg.id = room.currentPlayer;
-        foreach (string id in room.playerList)
-        {
-            PlayerManager.GetPlayer(id).Send(msg);
-        }
+        // 回合轮换、重发牌和阶段切换由服务器完成；客户端只能查询状态。
+        room.UpdateTurnTimer();
+        player.Send(room.GetTurnState());
     }
     /// <summary>
     /// 轮换下一个玩家
@@ -351,27 +350,15 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgSwitchTurn(ClientState c, MsgBase msgBase)
     {
-        MsgSwitchTurn msg = msgBase as MsgSwitchTurn;
         Player player = c.player;
         if (player == null)
             return;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        // 首次成功出牌前，轮次始终属于地主，不能按抢地主的步数轮换。
-        if (room.firstPlay)
-            room.Index = room.playerList.IndexOf(room.landLord);
-        else
-            room.Index += msg.round;
-
-        room.currentPlayer = room.playerList[room.Index];
-
-        msg.id = room.currentPlayer;
-        foreach (string id in room.playerList)
-        {
-            PlayerManager.GetPlayer(id).Send(msg);
-        }
+        // 回合轮换、重发牌和阶段切换由服务器完成；客户端只能查询状态。
+        room.UpdateTurnTimer();
+        player.Send(room.GetTurnState());
     }
     /// <summary>
     /// 获取上一家和下一家
@@ -406,48 +393,13 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgCall(ClientState c, MsgBase msgBase)
     {
-        MsgCall msg = msgBase as MsgCall;
         Player player = c.player;
         if (player == null)
             return;
-        msg.id = player.id;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        if (room.landLord != "")
-            return;
-
-        if (msg.call)
-        {
-            room.callID = player.id;
-            room.landLordRank[player.id] += 2;
-            if (room.CheckCall())
-            {
-                msg.result = 3;
-                room.SetLandLord(player.id);
-            }
-            else
-            {
-                msg.result = 1;
-            }
-            room.Send(msg);
-            return;
-        }
-        else
-        {
-            room.landLordRank[player.id] += 1;
-            if (room.CheckAllNotCall())
-            {
-                msg.result = 2;
-            }
-            else
-            {
-                msg.result = 0;
-            }
-            room.Send(msg);
-            return;
-        }
+        room.TryCall(player.id, (MsgCall)msgBase);
     }
     /// <summary>
     /// 都没有叫地主，重新开始
@@ -456,18 +408,15 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgReStart(ClientState c, MsgBase msgBase)
     {
-        MsgReStart msg = msgBase as MsgReStart;
         Player player = c.player;
         if (player == null)
             return;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        CardManager.Shuffle();
-        room.cards = CardManager.cards;
-        room.Start();
-        room.Send(msg);
+        // 回合轮换、重发牌和阶段切换由服务器完成；客户端只能查询状态。
+        room.UpdateTurnTimer();
+        player.Send(room.GetTurnState());
     }
     /// <summary>
     /// 开始抢地主
@@ -476,15 +425,15 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgStartRob(ClientState c, MsgBase msgBase)
     {
-        MsgStartRob msg = msgBase as MsgStartRob;
         Player player = c.player;
         if (player == null)
             return;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        room.Send(msg);
+        // 回合轮换、重发牌和阶段切换由服务器完成；客户端只能查询状态。
+        room.UpdateTurnTimer();
+        player.Send(room.GetTurnState());
     }
     /// <summary>
     /// 抢地主
@@ -493,112 +442,23 @@ public class MsgHandler
     /// <param name="msgBase"></param>
     public static void MsgRob(ClientState c, MsgBase msgBase)
     {
-        MsgRob msg = msgBase as MsgRob;
         Player player = c.player;
         if (player == null)
             return;
-        msg.id = player.id;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-
-        if (room.landLord != "")
-            return;
-
-        if (msg.rob)
-        {
-            room.landLordRank[player.id] += room.robRank++;
-        }
-        else
-        {
-            room.landLordRank[player.id]++;
-            if (room.CheckCall())
-            {
-                msg.landLord = room.callID;
-            }
-        }
-        if (player.id == room.callID)
-        {
-            //检测谁是地主
-            msg.landLord = room.CheckLandLord();
-        }
-        if (msg.landLord != "")
-        {
-            room.SetLandLord(msg.landLord);
-            msg.needRob = false;
-            room.Send(msg);
-            return;
-        }
-        if (room.landLordRank[room.playerList[room.Index + 1 >= 3 ? 0 : room.Index + 1]] == 0)
-        {
-            msg.needRob = false;
-        }
-        else
-        {
-            msg.needRob = true;
-        }
-        room.Send(msg);
-
+        room.TryRob(player.id, (MsgRob)msgBase);
     }
     public static void MsgPlayCards(ClientState c, MsgBase msgBase)
     {
-        MsgPlayCards msg = msgBase as MsgPlayCards;
         Player player = c.player;
         if (player == null)
             return;
-        msg.id = player.id;
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
             return;
-
-        if (room.firstPlay && (player.id != room.landLord || !msg.play))
-        {
-            msg.result = false;
-            player.Send(msg);
-            return;
-        }
-
-        Card[] cards = CardManager.GetCards(msg.cards);
-        if (msg.play)
-        {
-            msg.cardType = (int)CardManager.GetCardType(cards);
-            //前两家出牌了，和他们出的牌比较
-            if (room.prePrePlay || room.prePlay)
-            {
-                msg.result = CardManager.Compare(room.preCard.ToArray(), cards);
-            }
-            //前两家要不起，自己开始出
-            else
-            {
-                msg.result = CardManager.GetCardType(cards) != CardManager.CardType.wrong;
-            }
-            //出牌成功
-            if (msg.result)
-            {
-                room.firstPlay = false;
-                //删除卡牌
-                room.DeleteCards(cards, msg.id);
-                //判断输赢
-                msg.win = room.CheckWin();
-                room.preCard = cards.ToList();
-                room.prePrePlay = room.prePlay;
-                room.prePlay = true;
-            }
-            room.Send(msg);
-            return;
-        }
-        //玩家点击不出
-        else
-        {
-            room.prePrePlay = room.prePlay;
-            room.prePlay = false;
-            if (!room.prePrePlay)
-                msg.canNotPlay = false;
-            msg.result = true;
-            room.Send(msg);
-            return;
-        }
+        room.TryPlay(player.id, (MsgPlayCards)msgBase);
     }
     #endregion
 }

@@ -12,6 +12,7 @@ public class MsgRob : MsgBase
         protoName = "MsgRob";
     }
     public string id = "";
+    public long turnId; // 必须与服务器当前回合编号一致
     public bool rob;
     public bool needRob = true;
     public string landLord = "";

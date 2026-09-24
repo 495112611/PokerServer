@@ -159,7 +159,7 @@ public static class NetManager
             return;
         //解析数字
         short bodyLength = (short)(bytes[readBuff.readIndex + 1] * 256 + bytes[readBuff.readIndex]);
-        if (readBuff.Length < bodyLength)
+        if (readBuff.Length < bodyLength + 2)
             return;
         readBuff.readIndex += 2;
         //解析协议名

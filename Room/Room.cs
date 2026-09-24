@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 #nullable disable
 
-public class Room
+public partial class Room
 {
     /// <summary>
     /// 房间号
@@ -100,8 +100,9 @@ public class Room
         }
     }
 
-    public Room()
+    public Room(Func<long> clock = null)
     {
+        this.clock = clock ?? (() => Environment.TickCount64);
         if (cards == null)
         {
             CardManager.Shuffle();
@@ -167,6 +168,8 @@ public class Room
             return false;
         }
         playerList.Remove(id);
+        if (TimerActive)
+            StopTurnTimer();
 
         //判断是否以准备
         if (playerDict.ContainsKey(id))
@@ -274,6 +277,7 @@ public class Room
     /// </summary>
     public void Start()
     {
+        status = Status.Start;
         Random random = new Random();
         Index = random.Next(3);
         currentPlayer = playerList[Index];
@@ -311,6 +315,7 @@ public class Room
         {
             landLordRank.Add(playerList[i], -1);
         }
+        BeginTurn(TurnPhase.Call, Index);
     }
     /// <summary>
     /// 给当前房间所以玩家发送消息

@@ -12,6 +12,7 @@ public class MsgCall : MsgBase
         protoName = "MsgCall";
     }
     public string id = "";
+    public long turnId; // 必须与服务器当前回合编号一致
     public bool call;
     /// <summary>
     /// 0表示继续叫地主 1表示抢地主 2表示重新洗牌 3不需要抢地主

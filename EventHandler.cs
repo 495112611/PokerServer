@@ -32,6 +32,8 @@ public class EventHandler
     public static void OnTimer()
     {
         CheckPing();
+        foreach (Room room in RoomManager.rooms.Values.ToArray())
+            room.UpdateTurnTimer();
     }
     /// <summary>
     /// 检测Ping是否超时
